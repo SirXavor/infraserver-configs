@@ -47,7 +47,7 @@ kickstart:
         MAC="$(tr ':' '-' < /sys/class/net/$IFACE/address)"
         mkdir -p /etc/infraserver
         printf '%s\n' \
-          "DS_URL=http://192.168.1.70:8081" \
+          "DS_URL={{ ds_url }}" \
           "CFG_DIR=/etc/infraserver" \
           > /etc/infraserver/runtime.env
       fi
@@ -60,13 +60,13 @@ kickstart:
       cat > /etc/yum.repos.d/infraserver-local.repo << "EOF"
       [infraserver-baseos]
       name=InfraServer BaseOS
-      baseurl=http://192.168.1.70:8081/content/repos/rhel/9/BaseOS/
+      baseurl={{ ds_url }}/content/repos/rhel/9/BaseOS/
       enabled=1
       gpgcheck=0
 
       [infraserver-appstream]
       name=InfraServer AppStream
-      baseurl=http://192.168.1.70:8081/content/repos/rhel/9/AppStream/
+      baseurl={{ ds_url }}/content/repos/rhel/9/AppStream/
       enabled=1
       gpgcheck=0
       EOF

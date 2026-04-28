@@ -19,9 +19,9 @@ autoinstall:
       curtin in-target --target=/target -- bash -c '
       mkdir -p /etc/infraserver /var/log/infraserver
       cat > /etc/infraserver/bootstrap.env << "EOF"
-      DS_URL="http://192.168.1.70:8081"
+      DS_URL="{{ ds_url }}"
       CFG_DIR="/etc/infraserver"
-      REPO_URL="https://github.com/SirXavor/InfraServer.git"
+      REPO_URL="{{ repo_url }}"
       REPO_DIR="/opt/InfraServer"
       EOF
       chmod 600 /etc/infraserver/bootstrap.env
@@ -31,7 +31,9 @@ autoinstall:
       curtin in-target --target=/target -- bash -c '
       source /etc/infraserver/bootstrap.env
       if [ ! -d "$REPO_DIR/.git" ]; then
-        git clone "$REPO_URL" "$REPO_DIR"
+        git clone --recurse-submodules "$REPO_URL" "$REPO_DIR"
+      else
+        git -C "$REPO_DIR" submodule update --init --recursive
       fi
       '
 
@@ -49,9 +51,10 @@ autoinstall:
       echo "===== $(date) :: inicio repo-sync ====="
 
       if [ ! -d "$REPO_DIR/.git" ]; then
-        git clone "$REPO_URL" "$REPO_DIR"
+        git clone --recurse-submodules "$REPO_URL" "$REPO_DIR"
       else
         git -C "$REPO_DIR" pull --ff-only
+        git -C "$REPO_DIR" submodule update --remote --merge
       fi
 
       echo "===== $(date) :: fin repo-sync ====="

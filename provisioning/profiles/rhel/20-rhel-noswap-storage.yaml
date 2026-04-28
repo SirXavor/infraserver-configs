@@ -35,7 +35,7 @@ kickstart:
 
       LUKS_DEV="$(blkid -t TYPE=crypto_LUKS -o device | head -n1)"
       PASSPHRASE='InfraK3s-2026'
-      TANG_URL='http://192.168.1.70:8082'
+      TANG_URL='{{ tang_url }}'
 
       [ -n "$LUKS_DEV" ] || { echo "[ERROR] No se encontró dispositivo LUKS"; exit 1; }
 
