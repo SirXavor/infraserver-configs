@@ -1,0 +1,3 @@
+[submodule "provisioning/hosts"]
+	path = provisioning/hosts
+	url = https://github.com/SirXavor/infraserver-hosts.git
